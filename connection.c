@@ -65,20 +65,19 @@ int cross_connected(int matrix[NUM][NUM], int x1, int y1, int x2, int y2) {
 /*is connected ?*/
 int connected(int matrix[NUM][NUM], int x1, int y1, int x2, int y2) {
     int x, y;
-    int xbegin, xend;
-    int ybegin, yend;
-    /*connected by two crosses*/
-    xbegin = x1 < x2 ? x1:x2;
-    xend   = x1 > x2 ? x1:x2;
-    ybegin = y1 < y2 ? y1:y2;
-    yend   = y1 > y2 ? y1:y2;
-    for (x = xbegin+1; x < NUM; ++x) {
-        if (matrix[x][y1] == 0 && cross_connected(matrix, x, y1, x2, y2)) {
+    if(line_connected(matrix, x1, y1, x2, y2) ||
+            cross_connected(matrix, x1, y1, x2, y2)) {
+        return 1;
+    }
+    for (x = 0; x < NUM; ++x) {
+        if (matrix[x][y1] == 0 && line_connected(matrix, x, y1, x1, y1) && 
+                cross_connected(matrix, x, y1, x2, y2)) {
             return 1;
         }
     }
-    for (y = ybegin+1; y < NUM ; ++y) {
-        if (matrix[x1][y] == 0 && cross_connected(matrix, x1, y, x2, y2)) {
+    for (y = 0; y < NUM; ++y) {
+        if (matrix[x1][y] == 0 && line_connected(matrix, x1, y, x1, y1) && 
+                cross_connected(matrix, x1, y, x2, y2)) {
             return 1;
         }
     }
@@ -114,6 +113,7 @@ int main(int argc, char *argv[]) {
     printf("connection of (2, 0), (7, 4): %d\n", connected(matrix, 2, 0, 7, 4));
     printf("connection of (2, 0), (7, 5): %d\n", connected(matrix, 2, 0, 7, 5));
     printf("connection of (2, 0), (7, 0): %d\n", connected(matrix, 2, 0, 7, 0));
-    
+    printf("connection of (3, 3), (5, 5): %d\n", connected(matrix, 3, 3, 5, 5));
+    printf("connection of (3, 3), (6, 5): %d\n", connected(matrix, 3, 3, 6, 5));
     return 0;
 }
