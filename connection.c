@@ -36,28 +36,15 @@ int line_connected(int matrix[NUM][NUM], int x1, int y1, int x2, int y2) {
 /*connected by a cross*/
 int cross_connected(int matrix[NUM][NUM], int x1, int y1, int x2, int y2) {
     int x, y;
-    /*connected by a line*/
-    if(x1 == x2 || y1 == y2) {
-        if(line_connected(matrix, x1, y1, x2, y2)) {
-            return 1;
-        }
-        return 0;
-    }
-
-    /*connected by a cross*/
     x = x1, y = y2;
-    if (!matrix[x][y]) {
-        if(line_connected(matrix, x1, y1, x, y) && 
+    if (matrix[x][y] == 0 && line_connected(matrix, x1, y1, x, y) && 
                 line_connected(matrix, x2, y2, x, y)) {
-            return 1;
-        }
+        return 1;
     }
     x = x2, y = y1;
-    if (!matrix[x][y]) {
-        if(line_connected(matrix, x1, y1, x, y) && 
+    if (matrix[x][y]==0 && line_connected(matrix, x1, y1, x, y) && 
                 line_connected(matrix, x2, y2, x, y)) {
-            return 1;
-        }
+        return 1;
     }
     return 0;
 }
@@ -65,10 +52,12 @@ int cross_connected(int matrix[NUM][NUM], int x1, int y1, int x2, int y2) {
 /*is connected ?*/
 int connected(int matrix[NUM][NUM], int x1, int y1, int x2, int y2) {
     int x, y;
+    /*connected by line or a cross*/
     if(line_connected(matrix, x1, y1, x2, y2) ||
             cross_connected(matrix, x1, y1, x2, y2)) {
         return 1;
     }
+    /*connected by two crosses*/
     for (x = 0; x < NUM; ++x) {
         if (matrix[x][y1] == 0 && line_connected(matrix, x, y1, x1, y1) && 
                 cross_connected(matrix, x, y1, x2, y2)) {
@@ -105,15 +94,15 @@ int main(int argc, char *argv[]) {
     }
     printf("\n");
 
-    printf("connection of (7, 0), (7, 4): %d\n", connected(matrix, 7, 0, 7, 4));
-    printf("connection of (7, 0), (7, 5): %d\n", connected(matrix, 7, 0, 7, 5));
-    printf("connection of (2, 0), (2, 4): %d\n", connected(matrix, 2, 0, 2, 4));
-    printf("connection of (2, 0), (3, 4): %d\n", connected(matrix, 2, 0, 3, 4));
-    printf("connection of (2, 0), (1, 5): %d\n", connected(matrix, 2, 0, 1, 5));
-    printf("connection of (2, 0), (7, 4): %d\n", connected(matrix, 2, 0, 7, 4));
-    printf("connection of (2, 0), (7, 5): %d\n", connected(matrix, 2, 0, 7, 5));
-    printf("connection of (2, 0), (7, 0): %d\n", connected(matrix, 2, 0, 7, 0));
-    printf("connection of (3, 3), (5, 5): %d\n", connected(matrix, 3, 3, 5, 5));
-    printf("connection of (3, 3), (6, 5): %d\n", connected(matrix, 3, 3, 6, 5));
+    printf("connection of (7, 0), (7, 4): %d expected: 1\n", connected(matrix, 7, 0, 7, 4));
+    printf("connection of (7, 0), (7, 5): %d expected: 0\n", connected(matrix, 7, 0, 7, 5));
+    printf("connection of (2, 0), (2, 4): %d expected: 1\n", connected(matrix, 2, 0, 2, 4));
+    printf("connection of (2, 0), (3, 4): %d expected: 0\n", connected(matrix, 2, 0, 3, 4));
+    printf("connection of (2, 0), (1, 5): %d expected: 1\n", connected(matrix, 2, 0, 1, 5));
+    printf("connection of (2, 0), (7, 4): %d expected: 1\n", connected(matrix, 2, 0, 7, 4));
+    printf("connection of (2, 0), (7, 5): %d expected: 0\n", connected(matrix, 2, 0, 7, 5));
+    printf("connection of (2, 0), (7, 0): %d expected: 1\n", connected(matrix, 2, 0, 7, 0));
+    printf("connection of (3, 3), (5, 5): %d expected: 1\n", connected(matrix, 3, 3, 5, 5));
+    printf("connection of (3, 3), (6, 5): %d expected: 0\n", connected(matrix, 3, 3, 6, 5));
     return 0;
 }
